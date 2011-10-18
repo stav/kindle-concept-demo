@@ -26,13 +26,13 @@ import com.amazon.kindle.kindlet.KindletContext;
 //
 //  This demo illustrates a few concepts to build a robust Kindlet
 //  - handling life cycle correctly (actually this is rather difficult)
-//  - logging program progess (essential to debugging)
+//  - logging program progress (essential to debugging)
 //  - aiding garbage collection when destroying 
 //  - handling screen sizing to adjust to different kindle models and device orientation
 //  - catching five-way controller and general keyboard handling events
 //  - understanding screen redraws
 //  - painting a game board either with child components or via paint()
-//  - loading prescaled images to improve drawing speed 
+//  - loading pre-scaled images to improve drawing speed 
 //
 //
 //  Some more info about Kindle Development:
@@ -73,7 +73,7 @@ public class App extends AbstractKindlet
 
 	
 	//
-	// Start() stop() synchronisation and detection.  Necessary to handle screensaver/USB 
+	// Start() stop() synchronization and detection.  Necessary to handle screen-saver/USB 
 	// stuff in a halfway robust way, given the abusive testing that Q/A seems to do.
 	//
 	private static boolean stopped= false;
@@ -175,7 +175,7 @@ public class App extends AbstractKindlet
 					EventQueue.invokeLater(runnable);
 				}
 			}
-			else {	 // secondard start() (after screensaver, etc.)
+			else {	 // Secondary start() (after screen-saver, etc.)
 
 				App.logit("App::start resume after pause");
 				
@@ -229,19 +229,19 @@ public class App extends AbstractKindlet
 
 		this.gameBoard= new GameBoard();
 
-		// Add game board.  The game bboard will covers as much of the main area as possible  
+		// Add game board.  The game board will cover as much of the main area as possible  
 		// and will have its doLayout() called (the root's BorderLayout does all this) .
 		this.rootContainer.add(this.gameBoard, BorderLayout.CENTER); 
 
 
 		// Request focus to route keyboard events to the board (it has a keyboard listener installed).
 		// 
-		// Note: Only do this on first start.  On subsequent calls to start() (after screensaver, USB, etc.)
+		// Note: Only do this on first start.  On subsequent calls to start() (after screen-saver, USB, etc.)
 		// the Kindle will remember and refocus the component that had the focus when it went to sleep)
 		// - see http://forums.kindlecentral.com/forums/thread.jspa?threadID=535&tstart=0 (item posted Jul 13, 2011 8:36 AM) 
 		//  see http://forums.kindlecentral.com/forums/thread.jspa?threadID=889&tstart=0
 		
-		this.gameBoard.requestFocus(); // this will actually happen asynchoronously 
+		this.gameBoard.requestFocus(); // this will actually happen asynchronously 
 		
 		
 		// After this point, this function will not be called again. 
@@ -260,7 +260,7 @@ public class App extends AbstractKindlet
 		App.logit("App::stop");
 
 		// In order to handle stop() correctly, longish operations in threads throughout the program should 
-		// call App.isStopped() periodically and exit quicky (the framework system requires all threads to 
+		// call App.isStopped() periodically and exit quickly (the framework system requires all threads to 
 		// exit within 5 seconds when stop() is called)
 		
 		App.setStopped(true);	// keep this outside "synchronized" 
@@ -273,16 +273,16 @@ public class App extends AbstractKindlet
 
 			// Note: stop() can be called multiple times throughout the lifecycle, i.e. stop() 
 	    	// does not mean that the app actually ends.  Stop() is also called before going to 
-	    	// screensaver/USB.
+	    	// screen-saver/USB.
 
 	    	// Note: do *not* save the game state in stop().  On USB events the file system may already be 
-	    	// invalid. Instead save your stuff in destroy() or during gameplay directly after a user interaction.
+	    	// invalid. Instead save your stuff in destroy() or during game-play directly after a user interaction.
 	    	// - see http://forums.kindlecentral.com/forums/thread.jspa?threadID=813&tstart=0
 	    	// - see http://forums.kindlecentral.com/forums/thread.jspa?threadID=814&tstart=0
 
 			// Note: if you have timers, destroy them here.  Timers need to be stopped/destroyed in 
 	    	// the stop() method because otherwise they would continue to run and drain the battery 
-	    	// during screensaver (and thus they will need to be recreated on every start() iteration).
+	    	// during screen-saver (and thus they will need to be recreated on every start() iteration).
 
 			/* TODO: ... tear down timers if you have any... */
 		}
@@ -316,7 +316,7 @@ public class App extends AbstractKindlet
 		// Deconstruct and null out all object pointers (see comment in this.gameBoard.destroy())
 		// - see http://forums.kindlecentral.com/forums/thread.jspa?threadID=535&tstart=0 (item Posted: Nov 8, 2010 6:47 PM)
 
-		// Note: do not do this in the stop() call because there it may have been just a screensaver stop() and  
+		// Note: do not do this in the stop() call because there it may have been just a screen-saver stop() and  
 		// the system will expect the exactly same components to remain on screen when it wakes up again
 		this.rootContainer.setLayout(null);  // no need to waste time on implicit root-layout calls down from here 
 		this.rootContainer.removeAll();
